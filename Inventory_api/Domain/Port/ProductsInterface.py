@@ -10,3 +10,7 @@ class ProductsInterface(ABC):
         @abstractmethod
         def add_product(self, product: Products) -> Products:
             pass
+        
+        @abstractmethod
+        def remove_product(self, product_id: int) -> None:
+            pass

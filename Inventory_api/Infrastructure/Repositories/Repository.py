@@ -41,8 +41,6 @@ class InventoryRepository(ProductsInterface):
         return product
 
     def get_id_product(self, product_id):
-        print("-------------------------------------------------------------------------------------------------",product_id)
-        # Asegúrate de que product_id es un identificador de producto, no un objeto Inventory completo.
         if isinstance(product_id, Inventory):
             product_id = product_id.id
         return self.session.query(Inventory).filter(Inventory.id == product_id).first()

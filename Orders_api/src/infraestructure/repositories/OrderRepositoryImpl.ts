@@ -1,9 +1,10 @@
 import { Order } from '../../domain/models/Order';
 import { OrderService } from '../../domain/services/OrderService';
+import { OrderProductService } from '../../domain/services/ordersProductService';
 import { dbConfig } from '../../database/db';
 import { createPool, Pool, RowDataPacket } from 'mysql2/promise';
 
-export class OrderRepositoryImpl implements OrderService {
+export class OrderRepositoryImpl implements OrderService, OrderProductService {
   private pool: Pool;
 
   constructor() {
@@ -56,4 +57,28 @@ export class OrderRepositoryImpl implements OrderService {
       connection.release();
     }
   }
+
+  async addProductToOrder(orderId: string, price: number, quantity: number): Promise<void> {
+    const connection = await this.pool.getConnection();
+    try {
+      await connection.query('INSERT INTO Ordenes_Productos (order_id, precio, cantidad) VALUES (?, ?, ?)', [orderId, price, quantity]);
+    } finally {
+      connection.release();
+    }
+  }
+
+  async getOrderProducts(orderId: string): Promise<any[]> {
+    const connection = await this.pool.getConnection();
+    try {
+      const [rows] = await connection.query<RowDataPacket[]>('SELECT precio, cantidad FROM Ordenes_Productos WHERE order_id = ?', [orderId]);
+      return rows.map((row) => ({
+        productId: row.producto_id,
+        price: row.precio,
+        quantity: row.cantidad
+      }));
+    } finally {
+      connection.release();
+    }
+  }
+  
 }

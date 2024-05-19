@@ -3,14 +3,15 @@ import { OrderModel } from "../../database/db";
 import { Order as OrderDomain } from "../../domain/Entities/Order";
 
 export class OrderRepository {
-  private orderRepository = getRepository(OrderModel);
-  
-  async save(order: OrderDomain): Promise<OrderModel> {
-      const newOrder = this.orderRepository.create({
-        total: order.total,
-        status: order.Status,
-        date: order.date,
-      });
-      return await this.orderRepository.save(newOrder);
-  }
+    private orderRepository = getRepository(OrderModel);
+
+    async save(order: OrderDomain): Promise<OrderModel> {
+        const newOrder = this.orderRepository.create({
+            order_uuid: order.order_uuid,
+            total: order.total,
+            status: order.Status,
+            date: order.date,
+        });
+        return await this.orderRepository.save(newOrder);
+    }
 }

@@ -13,7 +13,7 @@ export class CreateOrderController {
     async create(req: Request, res: Response): Promise<void> {
         try {
             const { total, Status } = req.body;
-            const orderData = new Order(total, Status); // Se crea un nuevo pedido con la fecha actual
+            const orderData = new Order(total, Status);
             const [success, result] = await this.createOrderUseCase.execute(
                 orderData
             );

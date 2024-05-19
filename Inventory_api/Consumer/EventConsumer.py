@@ -1,6 +1,6 @@
 import pika
 import json
-from Application.UseCase import UpdateInventoryUseCase
+from Application.UseCase.UpdateInventoryUseCase import UpdateInventoryUseCase
 from Infrastructure.Repositories.Repository import InventoryRepository
 
 rabbitmq_settings = {
@@ -27,8 +27,8 @@ def callback(ch, method, properties, body):
     use_case.execute(order)
     print("Mensaje procesado.")
 
-print("Iniciando consumidor...")
-channel.basic_consume(queue='OrderShipped', on_message_callback=callback, auto_ack=True)
-
-print(' [*] Waiting for messages. To exit press CTRL+C')
-channel.start_consuming()
+def start_consumer():
+    print("Iniciando consumidor...")
+    channel.basic_consume(queue='OrderShipped', on_message_callback=callback, auto_ack=True)
+    print(' [*] Waiting for messages. To exit press CTRL+C')
+    channel.start_consuming()

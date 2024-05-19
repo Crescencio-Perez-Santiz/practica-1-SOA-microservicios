@@ -15,6 +15,9 @@ export class Order_ProductsModel {
     @Column("int")
     product_id!: number;
 
+    @Column("double")
+    price!: number;
+
     @Column("int")
     quantity!: number;
 

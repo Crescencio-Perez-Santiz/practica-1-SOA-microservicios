@@ -14,4 +14,8 @@ export class OrderRepository {
         });
         return await this.orderRepository.save(newOrder);
     }
+
+    async listAll(): Promise<OrderModel[]> {
+        return await this.orderRepository.find();
+    }
 }

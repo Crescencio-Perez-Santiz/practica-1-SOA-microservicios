@@ -18,4 +18,21 @@ export class OrderRepository {
     async listAll(): Promise<OrderModel[]> {
         return await this.orderRepository.find();
     }
+
+    async findById(id: number): Promise<OrderModel | undefined> {
+        const order = await this.orderRepository.findOne({ where: { id } });
+        return order || undefined;
+    }
+
+    async UpdateOrderStatus(
+        id: number,
+        status: string
+    ): Promise<OrderModel | undefined> {
+        const order = await this.findById(id);
+        if (order) {
+            order.status = status;
+            await this.orderRepository.save(order);
+        }
+        return order || undefined;
+    }
 }

@@ -24,6 +24,7 @@ class InventoryRepository(ProductsInterface):
         self.session = DBConnection().get_session()
     
     def get_products(self):
+        self.session.expire_all()
         products = self.session.query(Inventory).all()
         return products
         

@@ -1,19 +1,17 @@
-import express from 'express';
-import { OrderController } from '../controllers/OrderController';
-import { OrderUseCase } from '../../application/usecases/OrderUseCase';
-import { OrderRepositoryImpl } from '../repositories/OrderRepositoryImpl';
+import express, {Router} from 'express';
+import { CreateOrderController } from '../controllers/CreateOrderController';
+import { OrderRepository } from '../repositories/OrderRepository';
 
-const router = express.Router();
+const router : Router = express.Router();
+const repository: OrderRepository = new OrderRepository();
 
-const orderRepository = new OrderRepositoryImpl();
-const orderUseCase = new OrderUseCase(orderRepository);
-const orderController = new OrderController(orderUseCase);
+const createOrderController: CreateOrderController = new CreateOrderController(repository);
 
-router.post('/', async (req, res) => await orderController.createOrder(req, res));
-router.get('/', async (req, res) => await orderController.listOrders(req, res));
-router.put('/:id/status', async (req, res) => await orderController.updateOrderStatus(req, res));
 
-router.post('/:orderId/products', async (req, res) => await orderController.addProductToOrder(req, res));
-router.get('/:orderId/products', async (req, res) => await orderController.getOrderProducts(req, res));
+//Rutas
+router.post('/', async (req, res) => {
+    await createOrderController.create(req, res);
+})
+
 
 export default router;

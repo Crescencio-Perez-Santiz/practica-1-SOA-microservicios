@@ -1,14 +1,18 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import orderRoutes from './infraestructure/routes/orderRoutes';
+import express, { Application } from "express";
+import orderRoutes from "./infraestructure/routes/orderRoutes";
+import { config } from "dotenv";
 
-const app = express();
+config();
+
+const app: Application = express();
+
+app.use(express.json());
+
 const PORT = 3002;
+const nameService = "service orders";
 
-app.use(bodyParser.json());
-
-app.use('/', orderRoutes);
+app.use("/", orderRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log(`Server ${nameService} is running on port ${PORT}`);
 });

@@ -1,3 +1,6 @@
+import { Order_ProductsModel } from "../../infraestructure/Models/Order_Products";
+import { publishToQueue } from "../../Publisher/EventPublisher";
+
 export class UpdateOrderStatusUseCase {
     private orderRepository: any;
     private validStatuses: string[] = ["Pagado", "Creado", "Enviado"];
@@ -16,6 +19,13 @@ export class UpdateOrderStatusUseCase {
                 id,
                 status
             );
+            if (status === "Enviado") {
+                // Obtén los productos de la orden
+                const order_products =
+                    await this.orderRepository.getOrderProducts(id);
+                const order = { items: order_products };
+                publishToQueue("OrderShipped", order);
+            }
             return updatedOrder;
         } catch (error) {
             throw new Error(

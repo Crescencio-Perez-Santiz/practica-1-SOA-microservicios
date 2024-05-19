@@ -1,9 +1,11 @@
 import { getRepository } from "typeorm";
 import { OrderModel } from "../../database/db";
 import { Order as OrderDomain } from "../../domain/Entities/Order";
+import { Order_ProductsModel } from "../../infraestructure/Models/Order_Products";
 
 export class OrderRepository {
     private orderRepository = getRepository(OrderModel);
+    private orderProductsRepository = getRepository(Order_ProductsModel);
 
     async save(order: OrderDomain): Promise<OrderModel> {
         const newOrder = this.orderRepository.create({
@@ -34,5 +36,11 @@ export class OrderRepository {
             await this.orderRepository.save(order);
         }
         return order || undefined;
+    }
+
+    async getOrderProducts(id: number): Promise<Order_ProductsModel[]> {
+        return await this.orderProductsRepository.find({
+            where: { id: id },
+        });
     }
 }

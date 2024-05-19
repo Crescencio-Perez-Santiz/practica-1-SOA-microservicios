@@ -44,3 +44,10 @@ class InventoryRepository(ProductsInterface):
         if isinstance(product_id, Inventory):
             product_id = product_id.id
         return self.session.query(Inventory).filter(Inventory.id == product_id).first()
+    
+    def decrease_stock(self, product_id, quantity):
+        product = self.get_id_product(product_id)
+        if product and product.stock >= quantity:
+            product.stock -= quantity
+            self.session.commit()
+        return product
